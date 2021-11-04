@@ -146,8 +146,7 @@ elseif (isset($_GET['reportType']) && !empty($_GET['reportType'])):
     $Column = [
         'accessPage' => [
             'activity' => 'Aktivitas', 
-            'count(id)' => 'Jumlah Akses',
-            'inputdate' => 'Tanggal Akses'
+            'count(id)' => 'Jumlah Akses'
         ],
         'perPage:page' => [
             'input' => 'Halaman',
