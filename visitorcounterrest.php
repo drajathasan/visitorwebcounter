@@ -31,8 +31,9 @@ $WeekState->execute([date('Y-m-d', strtotime('-7 days')), date('Y-m-d')]);
 $Week = $WeekState->rowCount();
 
 // Month
-$FirstDay = date('Y-m-01');
-$LastDay = date('Y-m-') . cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'));
+// cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'))
+$FirstDay = date('Y-m-d', strtotime('-30 day'));
+$LastDay = date('Y-m-d');
 $WeekState->execute([$FirstDay, $LastDay]);
 $Month = $WeekState->rowCount();
 
