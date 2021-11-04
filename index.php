@@ -35,6 +35,14 @@ function httpQuery($query = [])
     return http_build_query(array_unique(array_merge($_GET, $query)));
 }
 
+// SLiMS Version
+$Version = str_replace(['v','.'], '', SENAYAN_VERSION_TAG);
+
+if ($Version < '940')
+{
+    die('<div class="errorBox">Plugin ini hanya untuk SLiMS versi >= 9.4.0</div>');
+}
+
 $page_title = 'Visitor Web Counter';
 
 /* Action Area */

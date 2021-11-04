@@ -32,9 +32,11 @@ $plugin->register('after_content_load', function() {
     
     // browser detetor
     $Detector = new BrowserParser(getallheaders(), [ 'detectBots' => false ]);
+    // SLiMS Version
+    $Version = str_replace(['v','.'], '', SENAYAN_VERSION_TAG);
     
     
-    if (!empty($Detector->browser->toString()))
+    if (!empty($Detector->browser->toString()) && $Version >= '940')
     {
         $DB = DB::getInstance();
         $StoreData = [

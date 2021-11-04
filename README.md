@@ -1,5 +1,8 @@
 # visitorwebcounter
+## Perhatian
+Plugin ini hanya untuk SLiMS versi >= 9.4.0
 
+## Cara Pasang
 copy paste script dibawah ini (Jika belum ada)
 
 ```php
