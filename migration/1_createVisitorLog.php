@@ -16,14 +16,16 @@ class createVisitorLog extends \SLiMS\Migration\Migration
      */
     public function up()
     {
-        $SQL = "CREATE TABLE `vistor_log` (
+        $SQL = "CREATE TABLE IF NOT EXISTS `vistor_log` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `uniqueuserid` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
             `activity` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
             `input` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
             `querystring` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
             `inputdate` datetime DEFAULT NULL,
-            PRIMARY KEY (`id`)
+            PRIMARY KEY (`id`),
+            KEY `uniqueuserid` (`uniqueuserid`),
+            KEY `activity` (`activity`)
           ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 
         \SLiMS\DB::getInstance()->query($SQL);
