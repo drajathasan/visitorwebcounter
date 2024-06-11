@@ -3,7 +3,7 @@
  * Plugin Name: VisitorWebCounter
  * Plugin URI: https://github.com/drajathasan/visitorWebCounter/
  * Description: Untuk counting
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Drajat Hasan
  * Author URI: https://github.com/drajathasan/
  */
@@ -23,15 +23,14 @@ $plugin->registerMenu('reporting', 'Visitor Web Counter', __DIR__ . '/index.php'
 $plugin->registerMenu('opac', 'visitorcounterrest', __DIR__ . '/visitorcounterrest.php');
 
 // Hook
-$plugin->register('after_content_load', function() {
-
+$plugin->register('before_content_load', function() {
     if (!isset($_SESSION['webVisitor']))
     {
         $_SESSION['webVisitor'] = utility::createRandomString(5);
     }
     
     // browser detetor
-    $Detector = new BrowserParser(getallheaders(), [ 'detectBots' => false ]);
+    $Detector = new BrowserParser(getallheaders(), [ 'detectBots' => true ]);
     // SLiMS Version
     $Version = str_replace(['v','.'], '', SENAYAN_VERSION_TAG);
     
@@ -40,25 +39,32 @@ $plugin->register('after_content_load', function() {
     {
         $DB = DB::getInstance();
         $StoreData = [
-            'activity' => array_key_first($_GET),
+            'activity' => 'opac',
             'input' => NULL,
             'querystring' => NULL,
             'inputdate' => date('Y-m-d H:i:s'),
             'uniqueuserid' => $_SESSION['webVisitor']
         ];
     
-        switch ($StoreData['activity']) {
-            case 'search':
-                $StoreData['input'] = (!empty($_GET['keywords'])) ? urldecode($_GET['keywords']) : null;
-                if (isset($_GET['searchtype']) && $_GET['searchtype'] == 'advance')
-                {
-                    $StoreData['activity'] = 'Advance';
+        switch (true) {
+            case (isset($_GET['search'])):
+                if (isset($_GET['keywords'])) {
+                    if (empty($_GET['keywords'])) return;
+                    $StoreData['activity'] = 'search';
+                    $StoreData['input'] = urldecode($_GET['keywords']);
+                } elseif (isset($_GET['title'])) {
+                    $StoreData['activity'] = 'advance';
                 }
                 break;
             
-            case 'p':
+            case (isset($_GET['p']) && !empty($_GET['p'])):
                 $StoreData['activity'] = 'page';
                 $StoreData['input'] = trim($_GET['p']);
+
+                if (strpos($StoreData['input'], 'api') !== false) {
+                    return;
+                }
+
                 if (isset($_GET['keywords']) && !empty($_GET['keywords']))
                 {
                     $StoreData['input'] = trim($_GET['p']) . '+' . trim(urldecode($_GET['keywords']));

@@ -15,7 +15,7 @@ $CachePath = UPLOAD . 'cache' . DS . 'cacheVisitorCounter.json';
 
 require __DIR__ . '/helper.php';
 
-if (isCacheValid()) jsonResponse(file_get_contents($CachePath), false); 
+if (isCacheValid($CachePath)) jsonResponse(file_get_contents($CachePath), false); 
 
 // Create instance
 $Instance = DB::getInstance();
@@ -41,4 +41,12 @@ $Month = $WeekState->rowCount();
 $AllAccess = $Instance->query('select count(uniqueuserid) from `vistor_log` group by uniqueuserid');
 $All = $AllAccess->rowCount();
 
-jsonResponse(createCache(['expire' => strtotime((date('Y-m-d H:i:s', strtotime('+5 minutes')))), 'all' => $All, 'today' => $Today, 'week' => $Week, 'month' => $Month]));
+jsonResponse(
+    createCache([
+        'expire' => strtotime((date('Y-m-d H:i:s', strtotime('+5 minutes')))), 
+        'all' => $All, 
+        'today' => $Today, 
+        'week' => $Week, 
+        'month' => $Month
+    ], $CachePath)
+);

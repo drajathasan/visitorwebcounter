@@ -7,10 +7,8 @@
  * @desc [description]
  */
 
-function isCacheValid()
+function isCacheValid($CachePath)
 {
-    global $CachePath;
-
     if (!file_exists($CachePath))
     {
         return false;
@@ -33,10 +31,8 @@ function jsonResponse($mix, $encode = true)
     exit;
 }
 
-function createCache($json)
+function createCache($data, $CachePath)
 {
-    global $CachePath;
-    @file_put_contents($CachePath, json_encode($json));
-
-    return $json;
+    if ($data['all'] > 100) file_put_contents($CachePath, json_encode($data));
+    return $data;
 }
